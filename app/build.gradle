@@ -44,6 +44,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
     implementation 'com.google.code.gson:gson:2.8.9'
 //    implementation 'androidx.lifecycle:lifecycle-extensions:2.4.1'
+    implementation "android.arch.work:work-runtime:1.0.1"
 
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.4.1'
