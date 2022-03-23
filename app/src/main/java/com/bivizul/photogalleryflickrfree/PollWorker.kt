@@ -16,6 +16,33 @@ class PollWorker(val context: Context, workerParams: WorkerParameters) :
     на состояние работы */
     override fun doWork(): Result {
         Log.i(TAG, "Work request triggered")
+        /** Получение последних фотографий */
+        val query = QueryPreferences.getStoredQuery(context)
+        val lastResultId = QueryPreferences.getLastResultId(context)
+        val items: List<GalleryItem> = if (query.isEmpty()) {
+            FlickrFetchr().fetchPhotosRequest()
+                .execute()
+                .body()
+                ?.photos
+                ?.galleryItems
+        } else {
+            FlickrFetchr().searchPhotosRequest(query)
+                .execute()
+                .body()
+                ?.photos
+                ?.galleryItems
+        } ?: emptyList()
+        /** Проверка, нет ли новых фотографий */
+        if(items.isEmpty()){
+            return Result.success()
+        }
+        val resultId = items.first().id
+        if(resultId == lastResultId){
+            Log.i(TAG,"Got an old result: $resultId")
+        } else {
+            Log.i(TAG, "Got a new result: $resultId")
+            QueryPreferences.setLastResultId(context, resultId)
+        }
         return Result.success()
     }
 }
