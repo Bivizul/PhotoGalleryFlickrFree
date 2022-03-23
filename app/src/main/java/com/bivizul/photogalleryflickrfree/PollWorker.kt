@@ -2,6 +2,7 @@ package com.bivizul.photogalleryflickrfree
 
 import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -74,7 +75,15 @@ class PollWorker(val context: Context, workerParams: WorkerParameters) :
             val notificationManager = NotificationManagerCompat.from(context)
             /** Размещения нашего уведомления */
             notificationManager.notify(0, notification)
+
+            /** Отправка широковещательного интента с разрешением */
+            context.sendBroadcast(Intent(ACTION_SHOW_NOTIFICATION), PERM_PRIVATE)
         }
         return Result.success()
+    }
+
+    companion object{
+        const val ACTION_SHOW_NOTIFICATION = "com.bivizul.photogalleryflickrfree.SHOW_NOTIFICATION"
+        const val PERM_PRIVATE = "com.bivizul.photogalleryflickrfree.PRIVATE"
     }
 }
