@@ -8,6 +8,7 @@ import androidx.core.content.edit
 Этот ключ применяется во всех операциях чтения или записи запроса */
 private const val PREF_SEARCH_QUERY = "searchQuery"
 private const val PREF_LAST_RESULT_ID = "lastResultId"
+private const val PREF_IS_POLLING = "isPolling"
 
 /** Добавление файла для работы с хранимым запросом
  *
@@ -29,8 +30,8 @@ object QueryPreferences {
     }
 
     /** Сохранение и получение идентификатора последней фотографии */
-    fun setLastResultId(context: Context, lastResultId: String){
-        PreferenceManager.getDefaultSharedPreferences(context).edit(){
+    fun setLastResultId(context: Context, lastResultId: String) {
+        PreferenceManager.getDefaultSharedPreferences(context).edit() {
             putString(PREF_LAST_RESULT_ID, lastResultId)
         }
     }
@@ -40,6 +41,17 @@ object QueryPreferences {
             .getString(PREF_LAST_RESULT_ID, "")!!
     }
 
+    /** Сохранение состояния Worker */
+    fun isPolling(context: Context): Boolean {
+        return PreferenceManager.getDefaultSharedPreferences(context)
+            .getBoolean(PREF_IS_POLLING, false)
+    }
+
+    fun setPolling(context: Context, isOn:Boolean){
+        PreferenceManager.getDefaultSharedPreferences(context).edit(){
+            putBoolean(PREF_IS_POLLING, isOn)
+        }
+    }
 
 
 }
