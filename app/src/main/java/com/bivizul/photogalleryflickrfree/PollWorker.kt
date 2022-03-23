@@ -1,5 +1,6 @@
 package com.bivizul.photogalleryflickrfree
 
+import android.app.Notification
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
@@ -72,18 +73,33 @@ class PollWorker(val context: Context, workerParams: WorkerParameters) :
                 .setAutoCancel(true)
                 .build()
 
-            val notificationManager = NotificationManagerCompat.from(context)
-            /** Размещения нашего уведомления */
+            /*val notificationManager = NotificationManagerCompat.from(context)
+            */
+            /** Размещения нашего уведомления *//*
             notificationManager.notify(0, notification)
+            */
+            /** Отправка широковещательного интента с разрешением *//*
+            context.sendBroadcast(Intent(ACTION_SHOW_NOTIFICATION), PERM_PRIVATE)*/
 
-            /** Отправка широковещательного интента с разрешением */
-            context.sendBroadcast(Intent(ACTION_SHOW_NOTIFICATION), PERM_PRIVATE)
+            /** Отправка упорядоченных широковещательных интентов */
+            showBackgroundNotification(0, notification)
         }
         return Result.success()
     }
 
-    companion object{
+    private fun showBackgroundNotification(requestCode: Int, notification: Notification){
+        val intent = Intent(ACTION_SHOW_NOTIFICATION).apply {
+            putExtra(REQUEST_CODE,requestCode)
+            putExtra(NOTIFICATION,notification)
+        }
+        /** Гарантируем, что трансляция будет доставлена приемнику вовремя */
+        context.sendOrderedBroadcast(intent, PERM_PRIVATE)
+    }
+
+    companion object {
         const val ACTION_SHOW_NOTIFICATION = "com.bivizul.photogalleryflickrfree.SHOW_NOTIFICATION"
         const val PERM_PRIVATE = "com.bivizul.photogalleryflickrfree.PRIVATE"
+        const val REQUEST_CODE = "REQUEST_CODE"
+        const val NOTIFICATION = "NOTIFICATION"
     }
 }

@@ -29,7 +29,7 @@
             android:name=".NotificationReceiver"
             android:permission="com.bivizul.photogalleryflickrfree.PRIVATE"
             android:exported="false">
-            <intent-filter>
+            <intent-filter android:priority="-999">
                 <action android:name="com.bivizul.photogalleryflickrfree.SHOW_NOTIFICATION" />
             </intent-filter>
         </receiver>
